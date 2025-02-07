@@ -2,15 +2,13 @@ package org.example.scheduledevelop.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import org.example.scheduledevelop.dto.UpdateEmailRequestDto;
 import org.example.scheduledevelop.dto.UserRequestDto;
 import org.example.scheduledevelop.dto.UserResponseDto;
 import org.example.scheduledevelop.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
@@ -25,5 +23,27 @@ public class UserController {
                 userService.signUp(requestDto.getUsername(), requestDto.getEmail());
 
         return new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDto> findByTd(@PathVariable Long id) {
+        UserResponseDto userResponseDto = userService.findById(id);
+
+        return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateEmail(@PathVariable Long id, @RequestBody UpdateEmailRequestDto requestDto) {
+        userService.updateEmail(id, requestDto.getOldEmail(), requestDto.getNewEmail());
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+
+        userService.delete(id);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

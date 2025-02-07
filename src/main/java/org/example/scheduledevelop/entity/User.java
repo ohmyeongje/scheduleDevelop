@@ -27,4 +27,7 @@ public class User extends ScheduleDevelop{
     }
 
 
+    public void updateEmail(String Email) {
+        this.email = email;
+    }
 }
