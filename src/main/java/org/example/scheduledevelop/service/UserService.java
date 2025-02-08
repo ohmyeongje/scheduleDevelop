@@ -17,13 +17,13 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserResponseDto signUp(String username, String email) {
+    public UserResponseDto signUp(String username, String email, String password) {
 
-        User user = new User(username, email);
+        User user = new User(username, email, password);
 
         User savedUser = userRepository.save(user);
 
-        return new UserResponseDto(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail());
+        return new UserResponseDto(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail(), savedUser.getPassword());
     }
 
     public UserResponseDto findById(Long id) {
@@ -35,7 +35,7 @@ public class UserService {
         }
         User finduser = optionalUser.get();
 
-        return new UserResponseDto(finduser.getId(), finduser.getUsername(), finduser.getEmail());
+        return new UserResponseDto(finduser.getId(), finduser.getUsername(), finduser.getEmail(), finduser.getPassword());
     }
 
     @Transactional

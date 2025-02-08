@@ -17,8 +17,14 @@ public class User extends ScheduleDevelop{
     @Column(nullable = false, unique = true)
     private String email; //이메일
 
-    public User() {
+    @Column(nullable = false)
+    private String password; //비밀번호
 
+
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
     }
 
     public User(String username, String email) {
@@ -26,8 +32,10 @@ public class User extends ScheduleDevelop{
         this.email = email;
     }
 
+    public User() {}
 
-    public void updateEmail(String Email) {
+    //
+    public void updateEmail(String email) {
         this.email = email;
     }
 }

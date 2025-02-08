@@ -8,6 +8,8 @@ import org.example.scheduledevelop.respository.ScheduleRepository;
 import org.example.scheduledevelop.respository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
@@ -16,13 +18,15 @@ public class ScheduleService {
 
 
     public ScheduleResponseDto save(String taskTitle, String taskContents, String username) {
+        User findUser = userRepository.findUsernameByElseThrow(username);
 
-        User findUser = userRepository.findUserByUsernameOrElseThrow(username);
-
-        Schedule schedule = new Schedule(taskTitle, taskContents);
-
+        Schedule schedule = new Schedule(taskTitle, taskContents, findUser);
         scheduleRepository.save(schedule);
 
         return new ScheduleResponseDto(schedule.getId(), schedule.getTaskTitle(), schedule.getTaskContents());
+    }
+
+    public List<ScheduleResponseDto> findAll() {
+        return scheduleRepository.findAll().stream().map(ScheduleResponseDto::toDto).toList();
     }
 }

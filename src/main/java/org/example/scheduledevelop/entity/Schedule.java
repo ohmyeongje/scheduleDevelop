@@ -12,9 +12,6 @@ public class Schedule {
     private Long id;
 
     @Column(nullable = false)
-    private String username;
-
-    @Column(nullable = false)
     private String taskTitle;
 
     @Column(columnDefinition = "longtext")
@@ -28,12 +25,9 @@ public class Schedule {
 
     }
 
-    public Schedule(String taskTitle, String taskContents) {
+    public Schedule(String taskTitle, String taskContents, User user) {
         this.taskTitle = taskTitle;
         this.taskContents = taskContents;
-    }
-
-    public void setUser(User user) {
         this.user = user;
     }
 }

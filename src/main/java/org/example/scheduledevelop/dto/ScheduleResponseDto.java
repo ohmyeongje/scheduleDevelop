@@ -1,6 +1,9 @@
 package org.example.scheduledevelop.dto;
 
 import lombok.Getter;
+import lombok.Setter;
+import org.example.scheduledevelop.entity.Schedule;
+
 
 @Getter
 public class ScheduleResponseDto {
@@ -15,5 +18,9 @@ public class ScheduleResponseDto {
         this.id = id;
         this.taskTitle = taskTitle;
         this.taskContents = taskContents;
+    }
+
+    public static ScheduleResponseDto toDto(Schedule schedule) {
+        return new ScheduleResponseDto(schedule.getId(), schedule.getTaskTitle(), schedule.getTaskContents());
     }
 }
