@@ -3,6 +3,7 @@ package org.example.scheduledevelop.service;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.scheduledevelop.dto.UserResponseDto;
 import org.example.scheduledevelop.entity.User;
 import org.example.scheduledevelop.respository.UserRepository;
@@ -12,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -32,9 +33,11 @@ public class UserService {
     public UserResponseDto login(String email, String password, HttpServletRequest request) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "이메일 또는 비밀번호가 잘못되었습니다."));
 
-        //세션 생성 및 저장
+        // 세션 생성 및 저장 (세션 키를 "user"로 변경)
         HttpSession session = request.getSession(true);
         session.setAttribute("user", user);
+
+        log.info(" 로그인 성공! 세션 저장: {} (사용자: {})", session.getId(), user);
 
         return new UserResponseDto(user.getId(), user.getUsername(), user.getEmail(), user.getPassword());
     }

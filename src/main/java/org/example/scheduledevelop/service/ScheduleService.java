@@ -1,6 +1,7 @@
 package org.example.scheduledevelop.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.example.scheduledevelop.dto.ScheduleResponseDto;
 import org.example.scheduledevelop.entity.Schedule;
 import org.example.scheduledevelop.entity.User;
@@ -12,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {

@@ -12,7 +12,7 @@ import org.springframework.util.PatternMatchUtils;
 import java.io.IOException;
 @Slf4j
 public class LoginFilter implements Filter {
-    private static final String[] WHITE_LIST = {"/", "/user/signup", "/login", "/logout"};
+    private static final String[] WHITE_LIST = {"/", "/users/signup", "/users/login", "/logout"};
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -22,23 +22,33 @@ public class LoginFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         String requestURL = httpRequest.getRequestURI();
 
-        log.info("로그인 필터 실행: {}", requestURL);
+        log.info(" 로그인 필터 실행: {}", requestURL);
 
-        // 1️⃣ 인증이 필요 없는 요청(화이트리스트)은 필터를 거치지 않고 통과
         if (isWhiteList(requestURL)) {
+            log.info(" 화이트리스트 URL, 필터 통과: {}", requestURL);
             chain.doFilter(request, response);
             return;
         }
 
-        // 2️⃣ 로그인 검증: 세션에서 사용자 정보 확인
         HttpSession session = httpRequest.getSession(false);
-        if (session == null || session.getAttribute("user") == null) {
-            log.warn("로그인되지 않은 사용자 요청: {}", requestURL);
+
+        if (session == null) {
+            log.warn(" 로그인되지 않은 사용자 요청 (세션 없음): {}", requestURL);
             httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인이 필요합니다.");
             return;
         }
 
-        // 3️⃣ 정상 로그인된 사용자 요청 -> 필터 통과
+        Object user = session.getAttribute("user");
+        log.info(" 세션 ID: {}", session.getId()); // 세션 ID 확인
+        log.info(" 세션에 저장된 사용자: {}", user); // 세션에 저장된 데이터 확인
+
+        if (user == null) {
+            log.warn(" 로그인되지 않은 사용자 요청 (세션 존재하지만 user 없음): {}", requestURL);
+            httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인이 필요합니다.");
+            return;
+        }
+
+        log.info("✅ 인증된 요청: {} (사용자: {})", requestURL, user);
         chain.doFilter(request, response);
     }
 
@@ -46,4 +56,3 @@ public class LoginFilter implements Filter {
         return PatternMatchUtils.simpleMatch(WHITE_LIST, requestURL);
     }
 }
-
