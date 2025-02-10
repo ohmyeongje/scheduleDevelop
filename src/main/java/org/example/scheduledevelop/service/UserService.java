@@ -1,5 +1,7 @@
 package org.example.scheduledevelop.service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduledevelop.dto.UserResponseDto;
 import org.example.scheduledevelop.entity.User;
@@ -24,6 +26,17 @@ public class UserService {
         User savedUser = userRepository.save(user);
 
         return new UserResponseDto(savedUser.getId(), savedUser.getUsername(), savedUser.getEmail(), savedUser.getPassword());
+    }
+
+    //로그인 기능 추가
+    public UserResponseDto login(String email, String password, HttpServletRequest request) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "이메일 또는 비밀번호가 잘못되었습니다."));
+
+        //세션 생성 및 저장
+        HttpSession session = request.getSession(true);
+        session.setAttribute("user", user);
+
+        return new UserResponseDto(user.getId(), user.getUsername(), user.getEmail(), user.getPassword());
     }
 
     public UserResponseDto findById(Long id) {

@@ -1,6 +1,7 @@
 package org.example.scheduledevelop.controller;
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduledevelop.dto.UpdateEmailRequestDto;
 import org.example.scheduledevelop.dto.UserRequestDto;
@@ -27,6 +28,13 @@ public class UserController {
                 );
 
         return new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
+    }
+
+    //로그인 추가
+    @PostMapping("login")
+    public ResponseEntity<UserResponseDto> login(@RequestBody UserRequestDto requestDto, HttpServletRequest request) {
+        UserResponseDto responseDto = userService.login(requestDto.getEmail(), requestDto.getPassword(), request);
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
