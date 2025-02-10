@@ -30,4 +30,8 @@ public class Schedule {
         this.taskContents = taskContents;
         this.user = user;
     }
+
+    public void update(String newTaskTitle) {
+        this.taskTitle = newTaskTitle;
+    }
 }
