@@ -51,6 +51,11 @@ public class UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "이메일 또는 비밀번호가 잘못되었습니다."));
 
+        // 여기서 null 체크 추가
+        if (user.getPassword() == null || !user.getPassword().equals(password)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "이메일 또는 비밀번호가 잘못되었습니다.");
+        }
+
         // 세션 생성 및 사용자 정보 저장
         HttpSession session = request.getSession(true);
         session.setAttribute("user", user);
