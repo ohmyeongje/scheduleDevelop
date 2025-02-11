@@ -1,6 +1,7 @@
 package org.example.scheduledevelop.controller;
 
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduledevelop.dto.CreateScheduleRequestDto;
 import org.example.scheduledevelop.dto.ScheduleResponseDto;
@@ -9,6 +10,7 @@ import org.example.scheduledevelop.service.ScheduleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 @RestController // RESTful 웹 서비스의 컨트롤러로 지정

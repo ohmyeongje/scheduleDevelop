@@ -43,7 +43,7 @@ public class ScheduleService {
         Schedule schedule = new Schedule(taskTitle, taskContents, findUser);
         scheduleRepository.save(schedule);
 
-        return new ScheduleResponseDto(schedule.getId(), schedule.getTaskTitle(), schedule.getTaskContents());
+        return new ScheduleResponseDto(schedule.getId(), schedule.getTaskTitle(), schedule.getTaskContents(), schedule.getUser().getUsername());
     }
 
 
