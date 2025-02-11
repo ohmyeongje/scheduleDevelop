@@ -12,14 +12,14 @@ public class Schedule {
     private Long id;
 
     @Column(nullable = false)
-    private String taskTitle;
+    private String taskTitle; //할 일 제목
 
     @Column(columnDefinition = "longtext")
-    private String taskContents;
+    private String taskContents; //할 일 내용
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private User user; //사용자
 
     public Schedule() {
 
