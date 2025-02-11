@@ -2,6 +2,7 @@ package org.example.scheduledevelop.controller;
 
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.scheduledevelop.dto.UpdateEmailRequestDto;
 import org.example.scheduledevelop.dto.UserRequestDto;
@@ -24,7 +25,7 @@ public class UserController {
      * @status 201 Created (회원가입 성공)
      */
     @PostMapping("/signup")
-    public ResponseEntity<UserResponseDto> signUp(@RequestBody UserRequestDto requestDto) {
+    public ResponseEntity<UserResponseDto> signUp(@Valid UserRequestDto requestDto) {
         UserResponseDto userResponseDto =
                 userService.signUp(
                         requestDto.getUsername(),
