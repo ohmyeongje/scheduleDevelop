@@ -30,16 +30,22 @@ public class ScheduleService {
      * @throws ResponseStatusException 404 NOT FOUND - 해당 사용자가 존재하지 않을 경우
      */
     public ScheduleResponseDto save(String taskTitle, String taskContents, String username) {
-        // 사용자가 존재하는지 확인
+        if (taskTitle == null || taskTitle.trim().isEmpty()) {  // 🔹 제목이 비어있는 경우 처리
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "일정 제목을 입력해야 합니다.");
+        }
+
+        if (username == null || username.trim().isEmpty()) {  // 🔹 사용자 이름 검증 추가
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "사용자 이름이 필요합니다.");
+        }
+
         User findUser = userRepository.findUsernameByElseThrow(username);
 
-        // 새로운 일정 객체 생성 후 저장
         Schedule schedule = new Schedule(taskTitle, taskContents, findUser);
         scheduleRepository.save(schedule);
 
-        // 생성된 일정 정보를 DTO로 변환하여 반환
         return new ScheduleResponseDto(schedule.getId(), schedule.getTaskTitle(), schedule.getTaskContents());
     }
+
 
     /**
      * 모든 일정 조회 메서드
@@ -60,20 +66,26 @@ public class ScheduleService {
      * @throws ResponseStatusException 404 NOT FOUND - 해당 일정이 존재하지 않을 경우
      * @throws ResponseStatusException 400 BAD REQUEST - 기존 제목이 일치하지 않을 경우
      */
-    @Transactional // 변경 사항을 자동으로 커밋하는 트랜잭션 처리
+    @Transactional
     public void update(Long id, String oldTaskTitle, String newTaskTitle) {
-        // ID로 일정 찾기
+        if (id == null || id <= 0) {  // 🔹 ID 검증 추가
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 일정 ID입니다.");
+        }
+
+        if (newTaskTitle == null || newTaskTitle.trim().isEmpty()) {  // 🔹 제목이 비어있는 경우 처리
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "새로운 제목을 입력해야 합니다.");
+        }
+
         Schedule findSchedule = scheduleRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "일정을 찾을 수 없습니다."));
 
-        // 기존 제목이 일치하는지 검증
         if (!findSchedule.getTaskTitle().equals(oldTaskTitle)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 입력입니다.");
         }
 
-        // 일정 제목 업데이트
         findSchedule.update(newTaskTitle);
     }
+
 
     /**
      * 일정 삭제 메서드
