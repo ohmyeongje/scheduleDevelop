@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.scheduledevelop.config.PasswordEncoder;
 import org.example.scheduledevelop.dto.UserResponseDto;
 import org.example.scheduledevelop.entity.User;
 import org.example.scheduledevelop.respository.UserRepository;
@@ -19,7 +20,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository; // 사용자 데이터를 관리하는 JPA 레포지토리
-
+    private final PasswordEncoder passwordEncoder; //사용자 비밀번호 암호화
     /**
      * 회원가입 메서드
      * @param username 사용자 이름
@@ -28,8 +29,11 @@ public class UserService {
      * @return 회원가입된 사용자의 정보 (UserResponseDto)
      */
     public UserResponseDto signUp(String username, String email, String password) {
-        // 새로운 사용자 객체 생성
-        User user = new User(username, email, password);
+        // 비밀번호 암호화
+        String encodedPassword = passwordEncoder.encode(password);
+
+        // 암호화된 비밀번호로 사용자 객체 생성
+        User user = new User(username, email, encodedPassword);
 
         // 사용자 정보 저장
         User savedUser = userRepository.save(user);
