@@ -72,15 +72,16 @@ public class UserService {
      * @throws ResponseStatusException 404 NOT FOUND - 존재하지 않는 사용자 ID 요청 시
      */
     public UserResponseDto findById(Long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-
-        if (optionalUser.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Does not exist id = " + id);
+        if (id == null || id <= 0) {  // 🔹 ID 값 검증
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 사용자 ID입니다.");
         }
-        User findUser = optionalUser.get();
+
+        User findUser = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."));
 
         return new UserResponseDto(findUser.getId(), findUser.getUsername(), findUser.getEmail(), findUser.getPassword());
     }
+
 
     /**
      * 이메일 수정 메서드
