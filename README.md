@@ -35,7 +35,8 @@ API명세서
 
 
 ERD다이어그램
-![스크린샷 2025-02-10 180629](https://github.com/user-attachments/assets/de227b49-89ac-46cc-be63-3962e187e18e)
+![스크린샷 2025-02-13 115613](https://github.com/user-attachments/assets/9a35f172-49dc-42da-a6c4-9dc38ab8c4d2)
+
 
 
 일정앱 과정 설명
